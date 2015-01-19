@@ -49,8 +49,8 @@ class S3DeploymentEngine(BaseDeploymentEngine):
         aws_access_key, aws_secret_key = self.credentials_manager.get_credentials()
 
         return boto.connect_s3(aws_access_key.strip(), aws_secret_key.strip(),
-                               host=self._s3_api_endpoint, is_secure=self._s3_is_secure, port=self._s3_port,
-                               https_connection_factory=self._s3_https_connection_factory)
+                host=self._s3_api_endpoint, is_secure=self._s3_is_secure, port=self._s3_port,
+                https_connection_factory=self._s3_https_connection_factory)
 
     def get_bucket(self):
         """
@@ -69,8 +69,8 @@ class S3DeploymentEngine(BaseDeploymentEngine):
             bucket = self.get_connection().create_bucket(self.bucket_name, policy='public-read')
         except boto.exception.S3CreateError:
             logger.info(
-                'Bucket with name %s already is used by someone else, '
-                'please try again with another name', self.bucket_name)
+                    'Bucket with name %s already is used by someone else, '
+                    'please try again with another name', self.bucket_name)
             return  #TODO: These should be exceptions
 
         # Configure S3 to use the index.html and error.html files for indexes and 404/500s.
@@ -79,18 +79,18 @@ class S3DeploymentEngine(BaseDeploymentEngine):
         return bucket
 
     def get_website_endpoint(self):
-       return self.bucket.get_website_endpoint()
-    
+        return self.bucket.get_website_endpoint()
+
     def domain_setup(self):
-        
+
         bucket_name = self.site.config.get(self.config_bucket_name)
-        
+
         if not bucket_name:
             logger.warning("No bucket name")
             return
-        
+
         aws_access_key, aws_secret_key = self.credentials_manager.get_credentials()
-        
+
         domain = AWSDomain(aws_access_key, aws_secret_key, bucket_name)
 
         try:

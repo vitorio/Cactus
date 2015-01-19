@@ -40,7 +40,7 @@ class BaseDeploymentEngine(object):
         return totalFiles
 
     def _ignore_file(self, path):
-        
+
         if os.path.basename(path).startswith("."):
             return True
 
