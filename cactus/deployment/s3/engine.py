@@ -94,7 +94,7 @@ class S3DeploymentEngine(BaseDeploymentEngine):
 
         try:
             domain.setup()
-        except DNSServerError, e:
+        except DNSServerError as e:
             logger.debug(e)
             ipc.signal("domain.setup.error", {"errorKey": "AccountDisabled"})
             logger.error("Account cannot use route 53")
@@ -102,18 +102,18 @@ class S3DeploymentEngine(BaseDeploymentEngine):
 
     def domain_list(self):
         bucket_name = self.site.config.get(self.config_bucket_name)
-        
+
         if not bucket_name:
             logger.warning("No bucket name")
             return
-        
+
         aws_access_key, aws_secret_key = self.credentials_manager.get_credentials()
-        
+
         domain = AWSDomain(aws_access_key, aws_secret_key, bucket_name)
 
         try:
             domain_list = domain.nameServers()
-        except DNSServerError, e:
+        except DNSServerError as e:
             print e
             ipc.signal("domain.list.error", {"errorKey": "AccountDisabled"})
             logger.error("Account cannot use route 53")
