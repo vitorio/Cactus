@@ -29,6 +29,14 @@ class WebSocketHandler(tornado.websocket.WebSocketHandler):
         pass
 
 class StaticHandler(tornado.web.StaticFileHandler):
+    @tornado.web.removeslash
+    def get(self, path, include_body=True):
+        return super(StaticHandler, self).get(path, include_body=True)
+    
+    def validate_absolute_path(self, root, absolute_path):
+        if os.path.exists(absolute_path + ".html"):
+            absolute_path = absolute_path + ".html"
+        return super(StaticHandler, self).validate_absolute_path(root, absolute_path)
     
     @classmethod
     def get_append(cls, abspath):
